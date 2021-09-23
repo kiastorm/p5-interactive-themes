@@ -1,8 +1,10 @@
-import { styled } from 'stitches.config'
+import { css, VariantProps } from 'stitches.config'
 
-export const Container = styled('div', {
+export type ContainerVariants = VariantProps<typeof container>
+
+export const container = css({
   // Reset
-  boxSizing: 'border-box',
+  include: ['box'],
   flexShrink: 0,
 
   // Custom

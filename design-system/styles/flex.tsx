@@ -1,7 +1,9 @@
-import { styled } from 'stitches.config'
+import { css, VariantProps } from 'stitches.config'
 
-export const Flex = styled('div', {
-  boxSizing: 'border-box',
+export type FlexVariants = VariantProps<typeof flex>
+
+export const flex = css({
+  include: ['box'],
   display: 'flex',
 
   variants: {

@@ -8,6 +8,7 @@
       "@test/*": ["test/*"]
     },
     "target": "es5",
+    "noErrorTruncation": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,

@@ -1,6 +1,32 @@
-import { styled } from 'stitches.config'
+import { Colors, CSS, css, VariantProps } from 'stitches.config'
 
-export const TextField = styled('input', {
+export type TextFieldVariants = VariantProps<typeof textField>
+
+const colorVariants = Object.keys(Colors).reduce(
+  (acc, color) => ({
+    ...acc,
+    [color]: {
+      backgroundColor: `$${color}2`,
+      boxShadow: `inset 0 0 0 1px $colors$${color}7`,
+      color: `$${color}11`,
+      '@hover': {
+        '&:hover': {
+          boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+        },
+      },
+      '&:active': {
+        backgroundColor: `$${color}3`,
+        boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+      },
+      '&:focus': {
+        boxShadow: `inset 0 0 0 1px $colors$${color}8, 0 0 0 1px $colors$${color}8`,
+      },
+    },
+  }),
+  {}
+) as { [key in `${Colors}`]: CSS }
+
+export const textField = css({
   // Reset
   appearance: 'none',
   borderWidth: '0',
@@ -11,6 +37,7 @@ export const TextField = styled('input', {
   padding: '0',
   width: '100%',
   WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+  transition: 'all .15s',
   '&::before': {
     boxSizing: 'border-box',
   },
@@ -84,6 +111,7 @@ export const TextField = styled('input', {
       },
     },
     variant: {
+      ...colorVariants,
       ghost: {
         boxShadow: 'none',
         backgroundColor: 'transparent',

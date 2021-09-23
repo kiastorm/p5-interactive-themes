@@ -1,7 +1,9 @@
-import { styled } from 'stitches.config'
+import { css, VariantProps } from 'stitches.config'
 
-export const Grid = styled('div', {
-  boxSizing: 'border-box',
+export type GridVariants = VariantProps<typeof grid>
+
+export const grid = css({
+  include: ['box'],
   display: 'grid',
 
   variants: {

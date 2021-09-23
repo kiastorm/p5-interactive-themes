@@ -1,11 +1,39 @@
-import { css } from '@stitches/react'
-import { styled } from 'stitches.config'
+import { Colors, CSS, css, VariantProps } from 'stitches.config'
 
-export const DEFAULT_TAG = 'button'
+export type ButtonVariants = VariantProps<typeof button>
+
+const colorVariants = Object.keys(Colors).reduce(
+  (acc, color) => ({
+    ...acc,
+    [color]: {
+      backgroundColor: `$${color}2`,
+      boxShadow: `inset 0 0 0 1px $colors$${color}7`,
+      color: `$${color}11`,
+      '@hover': {
+        '&:hover': {
+          boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+        },
+      },
+      '&:active': {
+        backgroundColor: `$${color}3`,
+        boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+      },
+      '&:focus': {
+        boxShadow: `inset 0 0 0 1px $colors$${color}8, 0 0 0 1px $colors$${color}8`,
+      },
+      '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
+        {
+          backgroundColor: `$${color}4`,
+          boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+        },
+    },
+  }),
+  {}
+) as { [key in `${Colors}`]: CSS }
 
 export const button = css({
   // Reset
-  inclue: ['box'],
+  include: ['box'],
   all: 'unset',
   alignItems: 'center',
   userSelect: 'none',
@@ -24,6 +52,7 @@ export const button = css({
   fontSize: '$2',
   fontWeight: 500,
   fontVariantNumeric: 'tabular-nums',
+  transition: 'all .15s',
 
   '&:disabled': {
     backgroundColor: '$slate2',
@@ -57,94 +86,7 @@ export const button = css({
       },
     },
     variant: {
-      gray: {
-        backgroundColor: '$loContrast',
-        boxShadow: 'inset 0 0 0 1px $colors$slate7',
-        color: '$hiContrast',
-        '@hover': {
-          '&:hover': {
-            boxShadow: 'inset 0 0 0 1px $colors$slate8',
-          },
-        },
-        '&:active': {
-          backgroundColor: '$slate2',
-          boxShadow: 'inset 0 0 0 1px $colors$slate8',
-        },
-        '&:focus': {
-          boxShadow: 'inset 0 0 0 1px $colors$slate8, 0 0 0 1px $colors$slate8',
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: '$slate4',
-            boxShadow: 'inset 0 0 0 1px $colors$slate8',
-          },
-      },
-      blue: {
-        backgroundColor: '$blue2',
-        boxShadow: 'inset 0 0 0 1px $colors$blue7',
-        color: '$blue11',
-        '@hover': {
-          '&:hover': {
-            boxShadow: 'inset 0 0 0 1px $colors$blue8',
-          },
-        },
-        '&:active': {
-          backgroundColor: '$blue3',
-          boxShadow: 'inset 0 0 0 1px $colors$blue8',
-        },
-        '&:focus': {
-          boxShadow: 'inset 0 0 0 1px $colors$blue8, 0 0 0 1px $colors$blue8',
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: '$blue4',
-            boxShadow: 'inset 0 0 0 1px $colors$blue8',
-          },
-      },
-      green: {
-        backgroundColor: '$green2',
-        boxShadow: 'inset 0 0 0 1px $colors$green7',
-        color: '$green11',
-        '@hover': {
-          '&:hover': {
-            boxShadow: 'inset 0 0 0 1px $colors$green8',
-          },
-        },
-        '&:active': {
-          backgroundColor: '$green3',
-          boxShadow: 'inset 0 0 0 1px $colors$green8',
-        },
-        '&:focus': {
-          boxShadow: 'inset 0 0 0 1px $colors$green8, 0 0 0 1px $colors$green8',
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: '$green4',
-            boxShadow: 'inset 0 0 0 1px $colors$green8',
-          },
-      },
-      red: {
-        backgroundColor: '$loContrast',
-        boxShadow: 'inset 0 0 0 1px $colors$slate7',
-        color: '$red11',
-        '@hover': {
-          '&:hover': {
-            boxShadow: 'inset 0 0 0 1px $colors$slate8',
-          },
-        },
-        '&:active': {
-          backgroundColor: '$red3',
-          boxShadow: 'inset 0 0 0 1px $colors$red8',
-        },
-        '&:focus': {
-          boxShadow: 'inset 0 0 0 1px $colors$red8, 0 0 0 1px $colors$red8',
-        },
-        '&[data-radix-popover-trigger][data-state="open"], &[data-radix-dropdown-menu-trigger][data-state="open"]':
-          {
-            backgroundColor: '$red4',
-            boxShadow: 'inset 0 0 0 1px $colors$red8',
-          },
-      },
+      ...colorVariants,
       transparentWhite: {
         backgroundColor: 'hsla(0,100%,100%,.2)',
         color: 'white',
@@ -164,6 +106,22 @@ export const button = css({
       transparentBlack: {
         backgroundColor: 'hsla(0,0%,0%,.2)',
         color: 'black',
+        '@hover': {
+          '&:hover': {
+            backgroundColor: 'hsla(0,0%,0%,.25)',
+          },
+        },
+        '&:active': {
+          backgroundColor: 'hsla(0,0%,0%,.3)',
+        },
+        '&:focus': {
+          boxShadow:
+            'inset 0 0 0 1px hsla(0,0%,0%,.35), 0 0 0 1px hsla(0,0%,0%,.35)',
+        },
+      },
+      hiContrast: {
+        backgroundColor: '$hiContrast',
+        color: '$loContrast',
         '@hover': {
           '&:hover': {
             backgroundColor: 'hsla(0,0%,0%,.25)',
@@ -328,5 +286,3 @@ export const button = css({
     variant: 'gray',
   },
 })
-
-export const Button = styled(DEFAULT_TAG, button)

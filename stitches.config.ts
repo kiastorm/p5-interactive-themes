@@ -119,6 +119,39 @@ import type * as Stitches from '@stitches/react'
 import { mixins } from 'stitches-mixins'
 export type { VariantProps } from '@stitches/react'
 
+export enum Colors {
+  red = 'red',
+  crimson = 'crimson',
+  pink = 'pink',
+  purple = 'purple',
+  violet = 'violet',
+  indigo = 'indigo',
+  blue = 'blue',
+  cyan = 'cyan',
+  teal = 'teal',
+  green = 'green',
+  lime = 'lime',
+  yellow = 'yellow',
+  orange = 'orange',
+  gold = 'gold',
+  bronze = 'bronze',
+  gray = 'gray',
+}
+
+export enum Themes {
+  'theme-default' = 'theme-default',
+  'dark-theme' = 'dark-theme',
+}
+
+export const colors = Object.keys(Colors)
+export const themes = Object.keys(Themes)
+
+export const getRandomColor = () =>
+  colors[Math.floor(Math.random() * colors.length)] as `${Colors}`
+
+export const getRandomTheme = () =>
+  themes[Math.floor(Math.random() * themes.length)] as `${Themes}`
+
 export const {
   styled,
   css,
@@ -198,6 +231,7 @@ export const {
       loContrast: 'white',
       canvas: 'hsl(0 0% 93%)',
       panel: 'white',
+      border: '$slate7',
       transparentPanel: 'hsl(0 0% 0% / 97%)',
       shadowLight: 'hsl(206 22% 7% / 35%)',
       shadowDark: 'hsl(206 22% 7% / 20%)',
@@ -499,6 +533,7 @@ export const darkTheme = createTheme('dark-theme', {
     // Semantic colors
     hiContrast: '$slate12',
     loContrast: '$slate1',
+    border: '$slate6',
     canvas: 'hsl(0 0% 15%)',
     panel: '$slate3',
     transparentPanel: 'hsl(0 100% 100% / 97%)',

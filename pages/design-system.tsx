@@ -1,21 +1,21 @@
-import { Box } from '@design-system/box'
-import { Button } from '@design-system/button'
-import { Container } from '@design-system/container'
-import { Flex } from '@design-system/flex'
-import { Grid } from '@design-system/grid'
-import { Heading } from '@design-system/heading'
-import { Image } from '@design-system/image'
-import { Paragraph } from '@design-system/paragraph'
-import { Section } from '@design-system/section'
-import { Separator } from '@design-system/separator'
-import { Sub } from '@design-system/sub'
-import { Sup } from '@design-system/sup'
-import { Text } from '@design-system/text'
-import { TextField } from '@design-system/text-field'
+import { Box } from '@design-system/react/box'
+import { Button } from '@design-system/react/button'
+import { Container } from '@design-system/react/container'
+import { Flex } from '@design-system/react/flex'
+import { Grid } from '@design-system/react/grid'
+import { Heading } from '@design-system/react/heading'
+import { Image } from '@design-system/react/image'
+import { Paragraph } from '@design-system/react/paragraph'
+import { Section } from '@design-system/react/section'
+import { Separator } from '@design-system/react/separator'
+import { Sub } from '@design-system/react/sub'
+import { Sup } from '@design-system/react/sup'
+import { Text } from '@design-system/react/text'
+import { TextField } from '@design-system/react/text-field'
 import { ArrowRightIcon, PlusIcon } from '@radix-ui/react-icons'
 import React from 'react'
 
-const Home = () => {
+const DesignSystem = () => {
   return (
     <Box>
       <Section size="3">
@@ -778,4 +778,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default DesignSystem

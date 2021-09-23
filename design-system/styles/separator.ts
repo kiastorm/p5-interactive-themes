@@ -1,7 +1,8 @@
-import { styled } from 'stitches.config'
-import * as SeparatorPrimitive from '@radix-ui/react-separator'
+import { css, VariantProps } from 'stitches.config'
 
-export const Separator = styled(SeparatorPrimitive.Root, {
+export type SeparatorVariants = VariantProps<typeof separator>
+
+export const separator = css({
   border: 'none',
   margin: 0,
   flexShrink: 0,

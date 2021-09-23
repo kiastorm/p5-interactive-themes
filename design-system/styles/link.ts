@@ -1,7 +1,30 @@
-import { styled } from 'stitches.config'
-import { Text } from './text'
+import { text } from '@design-system/styles/text'
+import { Colors, CSS, css, VariantProps } from 'stitches.config'
 
-export const Link = styled('a', {
+export type LinkVariants = VariantProps<typeof link>
+
+const colorVariants = Object.keys(Colors).reduce(
+  (acc, color) => ({
+    ...acc,
+    [color]: {
+      color: `$${color}11`,
+      textDecoration: `underline`,
+      textDecorationColor: `$${color}6`,
+      transition: 'all .15s',
+      '@hover': {
+        '&:hover': {
+          textDecorationColor: `$${color}9`,
+        },
+      },
+      '&:focus': {
+        outlineColor: `$${color}8`,
+      },
+    },
+  }),
+  {}
+) as { [key in `${Colors}`]: CSS }
+
+export const link = css({
   alignItems: 'center',
   gap: '$1',
   flexShrink: 0,
@@ -10,6 +33,7 @@ export const Link = styled('a', {
   textUnderlineOffset: '3px',
   textDecorationColor: '$slate4',
   WebkitTapHighlightColor: 'rgba(0,0,0,0)',
+  fontWeight: '500',
   lineHeight: 'inherit',
   '@hover': {
     '&:hover': {
@@ -22,18 +46,12 @@ export const Link = styled('a', {
     outlineOffset: '2px',
     textDecorationLine: 'none',
   },
-  [`& ${Text}`]: {
+  [`& ${text}`]: {
     color: 'inherit',
   },
   variants: {
     variant: {
-      blue: {
-        color: '$blue11',
-        textDecorationColor: '$blue4',
-        '&:focus': {
-          outlineColor: '$blue8',
-        },
-      },
+      ...colorVariants,
       subtle: {
         color: '$slate11',
         textDecorationColor: '$slate4',
