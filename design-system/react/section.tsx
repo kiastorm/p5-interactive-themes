@@ -1,28 +1,10 @@
-import { css, styled } from 'stitches.config'
+import { section, SectionVariants } from '@design-system/styles/section'
+import { styled } from 'stitches.config'
 
-export const DEFAULT_TAG = 'section'
+const DEFAULT_TAG = 'section'
 
-export const section = css({
-  // Reset
-  include: ['box'],
-  flexShrink: 0,
+const Section = styled(DEFAULT_TAG, section)
+Section.toString = () => `.${Section.className}`
 
-  variants: {
-    size: {
-      '1': {
-        py: '$3',
-      },
-      '2': {
-        py: '$5',
-      },
-      '3': {
-        py: '$9',
-      },
-    },
-  },
-  defaultVariants: {
-    size: '3',
-  },
-})
-
-export const Section = styled(DEFAULT_TAG, section)
+export type { SectionVariants }
+export { section, Section, DEFAULT_TAG }

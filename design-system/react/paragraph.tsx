@@ -1,11 +1,16 @@
-import { paragraph, ParagraphVariants } from '@design-system/styles/paragraph'
-import { cx } from '@utils/dom'
+import { Text } from '@design-system/react/text'
 import React from 'react'
-import { CSS } from 'stitches.config'
-import { text } from './text'
+import { CSS, VariantProps } from 'stitches.config'
+import merge from 'lodash.merge'
 
 const DEFAULT_TAG = 'p'
 
+type TextSizeVariants = Pick<VariantProps<typeof Text>, 'size'>
+type ParagraphSizeVariants = '1' | '2'
+type ParagraphVariants = { size?: ParagraphSizeVariants } & Omit<
+  VariantProps<typeof Text>,
+  'size'
+>
 type ParagraphProps = React.ComponentProps<typeof DEFAULT_TAG> &
   ParagraphVariants & { css?: CSS; as?: any }
 
@@ -14,16 +19,35 @@ const Paragraph = React.forwardRef<
   ParagraphProps
 >((props, forwardedRef) => {
   // '2' here is the default Paragraph size variant
-  const { className, size, variant, css, ...elementProps } = props
+  const { size = '1', ...textProps } = props
 
+  // This is the mapping of Paragraph Variants to Text variants
+  const textSize: Record<ParagraphSizeVariants, TextSizeVariants['size']> = {
+    1: { '@initial': '3', '@bp2': '4' },
+    2: { '@initial': '5', '@bp2': '6' },
+  }
+
+  // This is the mapping of Paragraph Variants to Text css
+  const textCss: Record<ParagraphSizeVariants, CSS> = {
+    1: { lineHeight: '25px', '@bp2': { lineHeight: '27px' } },
+    2: {
+      color: '$slate11',
+      lineHeight: '27px',
+      '@bp2': { lineHeight: '30px' },
+    },
+  }
   return (
-    <DEFAULT_TAG
-      {...elementProps}
+    <Text
+      as={DEFAULT_TAG}
+      {...textProps}
       ref={forwardedRef}
-      className={cx('paragraph', className, text({ size, variant, css }))}
+      size={textSize[size]}
+      css={{
+        ...merge(textCss[size], props.css),
+      }}
     />
   )
 })
 
 export type { ParagraphVariants }
-export { paragraph, Paragraph, DEFAULT_TAG }
+export { Paragraph, DEFAULT_TAG }

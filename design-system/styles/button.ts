@@ -12,6 +12,7 @@ const colorVariants = Object.keys(Colors).reduce(
       '@hover': {
         '&:hover': {
           boxShadow: `inset 0 0 0 1px $colors$${color}9`,
+          zIndex: 1,
         },
       },
       '&:active': {
