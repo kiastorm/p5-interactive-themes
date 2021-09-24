@@ -414,8 +414,9 @@ const Home = () => {
                 <p
                   ref={setMainRefs}
                   className={paragraph({
+                    gradient: true,
+                    variant: activeColor,
                     css: {
-                      color: `$${activeColor}11`,
                       mb: '$4',
                       WebkitBackgroundClip: 'text',
                       transform: 'translateY(20px)',
