@@ -198,7 +198,7 @@ const Home = () => {
           </Flex>
         </Flex>
       </Box>
-      <div style={{ position: 'relative' }}>
+      <Box css={{ position: 'relative', backgroundColor: `$${activeColor}4` }}>
         {/* <P5Image activeColor={activeColor} isLightTheme={isLightTheme} /> */}
         <P5Image2
           pRef={pRef}
@@ -209,7 +209,7 @@ const Home = () => {
           toggleFreeze={toggleFreeze}
           // setIsFilled={setIsFilled}
         />
-      </div>
+      </Box>
     </Layout>
   )
 }
