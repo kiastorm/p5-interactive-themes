@@ -53,7 +53,8 @@ export const button = css({
   fontSize: '$2',
   fontWeight: 500,
   fontVariantNumeric: 'tabular-nums',
-  transition: 'all .15s',
+  transition: '.15s',
+  transitionProperty: 'boxShadow, backgroundColor, color',
 
   '&:disabled': {
     backgroundColor: '$slate2',

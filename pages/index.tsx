@@ -4,6 +4,12 @@ import { Container } from '@design-system/react/container'
 import { ControlGroup } from '@design-system/react/control-group'
 import { Flex } from '@design-system/react/flex'
 import { Heading } from '@design-system/react/heading'
+import { useBoolean } from '@design-system/react/hooks/use-boolean'
+import { useLatestRef } from '@design-system/react/hooks/use-latest-ref'
+import {
+  useStickyBoolean,
+  useStickyState,
+} from '@design-system/react/hooks/use-sticky-state'
 import { Paragraph } from '@design-system/react/paragraph'
 import { Select } from '@design-system/react/select'
 import { box } from '@design-system/styles/box'
@@ -15,7 +21,14 @@ import { label } from '@design-system/styles/label'
 import { link } from '@design-system/styles/link'
 import { paragraph } from '@design-system/styles/paragraph'
 import { textField } from '@design-system/styles/text-field'
-import { MoonIcon, SunIcon, UpdateIcon } from '@radix-ui/react-icons'
+import {
+  MoonIcon,
+  PauseIcon,
+  PlayIcon,
+  SunIcon,
+  TrashIcon,
+  UpdateIcon,
+} from '@radix-ui/react-icons'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { Layout } from 'custom/layout'
 import { P5Image2 } from 'custom/p5-image-2'
@@ -60,20 +73,6 @@ const intro = css({
     },
   },
 })
-
-const useStickyState = <T extends any>(key: string, defaultValue: T) => {
-  const [value, setValue] = useState<T>(() => {
-    const stickyValue = window.localStorage.getItem(key)
-
-    return stickyValue ? JSON.parse(stickyValue) : defaultValue
-  })
-
-  useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value))
-  }, [key, value])
-
-  return [value, setValue] as const
-}
 
 const Article = (props) => {
   const { name, activeColor, inViewIndex, hasScrolled, css, ...rest } = props
@@ -155,10 +154,16 @@ const Home = () => {
   const headerRef = useRef<HTMLElement>(null)
   const mainRef = useRef<HTMLElement>(null)
   const postsHeadingRef = useRef<HTMLElement>(null)
-  const themeControlsRef = useRef<HTMLElement>(null)
-  const [themeControlsInViewRef, themeControlsIsInView, themeControlsEntry] =
-    useInView(options)
-  const themeControlsWasInView = useRef(false)
+  // const themeControlsRef = useRef<HTMLElement>(null)
+  // const [themeControlsInViewRef, themeControlsIsInView, themeControlsEntry] =
+  //   useInView(options)
+  // const themeControlsWasInView = useRef(false)
+  const [isFrozen, setIsFrozen] = useStickyBoolean('kormsen--isDrawingFrozen')
+  const [isFilled] = useBoolean()
+  const [shouldShowDeleteDrawingButton, setShouldShowDeleteDrawingButton] =
+    useBoolean(!isFrozen)
+  const isFrozenRef = useLatestRef(isFrozen)
+  // const isFilledRef = useLatestRef(isFilled)
 
   const [headerInViewRef, headerIsInView, headerEntry] = useInView(options)
   const headerWasInView = useRef(false)
@@ -170,6 +175,7 @@ const Home = () => {
   const postsHeadingWasInView = useRef(false)
   const hasScrolled = useRef(false)
   const inViewIndex = useRef(0)
+  const pRef = useRef(null)
   const isLightTheme = theme === 'theme-default'
 
   const handleScroll = () => {
@@ -213,13 +219,13 @@ const Home = () => {
     [postsHeadingInViewRef]
   )
 
-  const setThemeControlsRefs = useCallback(
-    (node) => {
-      themeControlsRef.current = node
-      themeControlsInViewRef(node)
-    },
-    [themeControlsInViewRef]
-  )
+  // const setThemeControlsRefs = useCallback(
+  //   (node) => {
+  //     themeControlsRef.current = node
+  //     themeControlsInViewRef(node)
+  //   },
+  //   [themeControlsInViewRef]
+  // )
 
   if (headerIsInView) {
     if (!headerWasInView.current) {
@@ -238,22 +244,22 @@ const Home = () => {
     }
   }
 
-  if (themeControlsIsInView) {
-    if (!themeControlsWasInView.current) {
-      Motion.animate(
-        themeControlsEntry.target,
-        {
-          opacity: 1,
-          transform: 'translate(0px, 0px)',
-        },
-        {
-          easing: 'ease-out',
-          delay: inViewIndex.current / DELAY,
-        }
-      )
-      inViewIndex.current++
-    }
-  }
+  // if (themeControlsIsInView) {
+  //   if (!themeControlsWasInView.current) {
+  //     Motion.animate(
+  //       themeControlsEntry.target,
+  //       {
+  //         opacity: 1,
+  //         transform: 'translate(0px, 0px)',
+  //       },
+  //       {
+  //         easing: 'ease-out',
+  //         delay: inViewIndex.current / DELAY,
+  //       }
+  //     )
+  //     inViewIndex.current++
+  //   }
+  // }
 
   if (mainIsInView) {
     if (!mainWasInView.current) {
@@ -288,6 +294,32 @@ const Home = () => {
     }
   }
 
+  const unfreeze = useCallback(() => {
+    setIsFrozen.off()
+    pRef.current.loop()
+  }, [])
+
+  const freeze = useCallback(() => {
+    setIsFrozen.on()
+    pRef.current.noLoop()
+  }, [])
+
+  const toggleFreeze = useCallback(() => {
+    if (isFrozenRef.current) {
+      setShouldShowDeleteDrawingButton.on()
+      unfreeze()
+    } else {
+      freeze()
+    }
+  }, [isFrozenRef.current, freeze, unfreeze])
+
+  const deleteDrawing = useCallback(() => {
+    if (isFrozenRef.current) {
+      setShouldShowDeleteDrawingButton.off()
+    }
+    pRef.current.clear()
+  }, [])
+
   return (
     <Layout>
       <div>
@@ -316,28 +348,13 @@ const Home = () => {
                 <ReaderIcon />
               </Button>
             </Flex> */}
-            <Flex>
+            <Flex gap="1">
               <ControlGroup
-                ref={setThemeControlsRefs}
-                css={{ transform: 'translate(20px, -20px)', opacity: 0 }}
+              // ref={setThemeControlsRefs}
+              // css={{ transform: 'translate(20px, -20px)', opacity: 0 }}
               >
-                <Button
-                  variant={activeColor}
-                  onClick={() =>
-                    setTheme(
-                      theme === 'theme-default'
-                        ? (darkTheme.selector.replace('.', '') as 'dark-theme')
-                        : 'theme-default'
-                    )
-                  }
-                  // css={{
-                  //   backgroundColor: '$hiContrast',
-                  //   color: '$loContrast',
-                  // }}
-                >
-                  {isLightTheme ? <MoonIcon /> : <SunIcon />}
-                </Button>
                 <Select
+                  title="Choose colour scheme"
                   value={activeColor}
                   onChange={(e) =>
                     setActiveColor(e.currentTarget.value as `${Colors}`)
@@ -351,6 +368,7 @@ const Home = () => {
                   ))}
                 </Select>
                 <Button
+                  title="Randomize colour scheme"
                   variant={activeColor}
                   onClick={() => {
                     setActiveColor(getRandomColor())
@@ -362,12 +380,57 @@ const Home = () => {
             <option>modulz</option>
           </Select> */}
               </ControlGroup>
+              <ControlGroup>
+                <Button
+                  title={isFrozen ? 'Start drawing' : 'Stop drawing'}
+                  variant={activeColor}
+                  onClick={toggleFreeze}
+                >
+                  {isFrozen ? <PlayIcon /> : <PauseIcon />}
+                </Button>
+                {shouldShowDeleteDrawingButton && (
+                  <>
+                    <Button
+                      title="Delete drawing"
+                      variant={activeColor}
+                      onClick={deleteDrawing}
+                    >
+                      <TrashIcon />
+                    </Button>
+                  </>
+                )}
+              </ControlGroup>
+              <Button
+                title={
+                  isLightTheme
+                    ? 'Switch to dark appearance'
+                    : 'Switch to light appearance'
+                }
+                variant={activeColor}
+                onClick={() =>
+                  setTheme(
+                    isLightTheme
+                      ? (darkTheme.selector.replace('.', '') as 'dark-theme')
+                      : 'theme-default'
+                  )
+                }
+              >
+                {isLightTheme ? <MoonIcon /> : <SunIcon />}
+              </Button>
             </Flex>
           </Flex>
         </Box>
         <div style={{ position: 'relative' }}>
           {/* <P5Image activeColor={activeColor} isLightTheme={isLightTheme} /> */}
-          <P5Image2 activeColor={activeColor} isLightTheme={isLightTheme} />
+          <P5Image2
+            pRef={pRef}
+            activeColor={activeColor}
+            isLightTheme={isLightTheme}
+            isFrozen={isFrozen}
+            isFilled={isFilled}
+            toggleFreeze={toggleFreeze}
+            // setIsFilled={setIsFilled}
+          />
           <header
             className={box({
               css: {

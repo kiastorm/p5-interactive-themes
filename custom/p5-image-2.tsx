@@ -1,7 +1,7 @@
 import { box } from '@design-system/styles/box'
 import chroma from 'chroma-js'
 import gd from 'generative-design-library.js'
-import { useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 import { Colors, darkTheme, theme as lightTheme } from 'stitches.config'
 
 const HUE_MODIFIER = 20
@@ -26,14 +26,24 @@ const randomSaturation = (chromaColor: any) =>
 export const P5Image2 = ({
   activeColor,
   isLightTheme,
+  isFrozen,
+  isFilled,
+  toggleFreeze,
+  pRef,
 }: {
   activeColor: `${Colors}`
   isLightTheme: boolean
+  isFrozen: boolean
+  isFilled: boolean
+  toggleFreeze(): void
+  pRef: MutableRefObject<any>
 }) => {
   const parentRef = useRef<HTMLDivElement>(null)
   const sketch = useRef()
   const activeColorRef = useRef(activeColor)
   const isLightThemeRef = useRef(isLightTheme)
+  const isFrozenRef = useRef(isFrozen)
+  const isFilledRef = useRef(isFilled)
 
   useEffect(() => {
     if (activeColorRef.current !== activeColor) {
@@ -43,12 +53,21 @@ export const P5Image2 = ({
     if (isLightThemeRef.current !== isLightTheme) {
       isLightThemeRef.current = isLightTheme
     }
-  }, [activeColor, isLightTheme])
+
+    if (isFrozenRef.current !== isFrozen) {
+      isFrozenRef.current = isFrozen
+    }
+
+    if (isFilledRef.current !== isFilled) {
+      isFilledRef.current = isFilled
+    }
+  }, [activeColor, isLightTheme, isFrozen, isFilled])
 
   useEffect(() => {
     const p5 = require('p5')
 
     sketch.current = new p5((p) => {
+      pRef.current = p
       const formResolution = 50
       let stepSize = 10
 
@@ -59,7 +78,7 @@ export const P5Image2 = ({
       const y = []
 
       let filled = p.random([false, true])
-      let freeze = false
+
       let drawMode = 1
 
       p.setup = () => {
@@ -71,18 +90,21 @@ export const P5Image2 = ({
         const { width, height } = parentRef.current.getBoundingClientRect()
         p.createCanvas(width, height).parent(parentRef.current)
         p.colorMode(p.RGB)
+        if (isFrozenRef.current) {
+          p.noLoop()
+        } else {
+          // init shape
+          centerX = p.random(p.width)
 
-        // init shape
-        centerX = p.random(p.width)
+          centerY = p.random(p.height)
+          const angle = p.radians(360 / formResolution)
+          for (let i = 0; i < formResolution; i++) {
+            x.push(p.cos(angle * i) * initRadius)
+            y.push(p.sin(angle * i) * initRadius)
+          }
 
-        centerY = p.random(p.height)
-        const angle = p.radians(360 / formResolution)
-        for (let i = 0; i < formResolution; i++) {
-          x.push(p.cos(angle * i) * initRadius)
-          y.push(p.sin(angle * i) * initRadius)
+          p.strokeWeight(p.random(0.1, 2))
         }
-
-        p.strokeWeight(p.random(0.1, 2))
       }
 
       p.draw = () => {
@@ -161,6 +183,9 @@ export const P5Image2 = ({
       }
       p.doubleClicked = () => {
         filled = !filled
+        if (isFrozenRef.current) {
+          toggleFreeze()
+        }
       }
 
       p.mousePressed = () => {
@@ -213,12 +238,7 @@ export const P5Image2 = ({
         stepSize = p.max(stepSize, 1)
 
         // pause/play draw loop
-        if (p.key == 'f' || p.key == 'F') freeze = !freeze
-        if (freeze) {
-          p.noLoop()
-        } else {
-          p.loop()
-        }
+        if (p.key == 'f' || p.key == 'F') toggleFreeze()
       }
     })
   }, [])
