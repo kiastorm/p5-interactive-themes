@@ -4,6 +4,7 @@ import { Container } from '@design-system/react/container'
 import { ControlGroup } from '@design-system/react/control-group'
 import { Flex } from '@design-system/react/flex'
 import { Heading } from '@design-system/react/heading'
+import { Paragraph } from '@design-system/react/paragraph'
 import { Select } from '@design-system/react/select'
 import { box } from '@design-system/styles/box'
 import { button } from '@design-system/styles/button'
@@ -114,13 +115,12 @@ const Article = (props) => {
       as="article"
       ref={setRefs}
       css={{
-        gridRowEnd: ['span 26', 'span 33', 'span 46'][
-          Math.floor(Math.random() * 3)
-        ],
         transform: 'translateY(20px)',
         opacity: 0,
         backgroundColor: 'white',
-        p: '$6',
+        p: '$2',
+        minHeight: '$8',
+        textAlign: 'left',
         border: `1px solid $colors$${activeColor}8`,
         // border: isLightTheme
         //   ? `1px solid $colors$${activeColor}6`
@@ -129,7 +129,13 @@ const Article = (props) => {
       }}
       {...rest}
     >
-      {name}
+      <Heading size="1" css={{ mb: '$1' }}>
+        {name}
+      </Heading>
+      <Paragraph>
+        With more useful text too. Here we will discuss an important topic: me,
+        myself, I - number one.
+      </Paragraph>
     </Box>
   )
 }
@@ -516,7 +522,7 @@ const Home = () => {
                     .fill(undefined)
                     .map((item, index) => {
                       const id = String(index)
-                      const name = `item-${index}`
+                      const name = `Some useful article ${index}`
                       return (
                         <Article
                           key={id}
@@ -558,11 +564,16 @@ const Home = () => {
                 css: {
                   display: 'flex',
                   flexDirection: 'column',
+                  textAlign: 'center',
                   jc: 'space-between',
                 },
               })}
             >
-              <Heading size="1" variant={activeColor} css={{ mr: '$2' }}>
+              <Heading
+                size="1"
+                variant={activeColor}
+                css={{ mr: '$2', mb: '$2' }}
+              >
                 Get my resume by email
               </Heading>
               <VisuallyHidden.Root>
