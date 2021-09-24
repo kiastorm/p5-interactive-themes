@@ -9,6 +9,8 @@ const HUE_MODIFIER = 20
 const hslStringToArray = (value: string) => {
   const regExp = /\(([^)]+)\)/
   const hslPure = regExp.exec(value.replaceAll('%', ''))
+
+  if (!hslPure) return []
   const hsl = hslPure[1].split(' ').map(Number)
 
   const h = hsl[0]
@@ -88,7 +90,7 @@ export const P5Image2 = ({
         // const color = colors[Math.floor(Math.random() * colors.length)]
         const theme = isLightThemeRef.current ? lightTheme : darkTheme
         const hslArray = hslStringToArray(
-          theme['colors'][`${activeColorRef.current}6`].value
+          theme['colors'][`${activeColorRef.current}6`]?.value ?? ''
         )
         // const color = chroma(...hslArray, 'hsl')
         const [h, s, l] = hslArray

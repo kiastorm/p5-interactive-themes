@@ -36,26 +36,26 @@ export const text = css({
       },
       '5': {
         fontSize: '$5',
-        letterSpacing: '-.015em',
+        // letterSpacing: '-.015em',
       },
       '6': {
         fontSize: '$6',
-        letterSpacing: '-.016em',
+        // letterSpacing: '-.016em',
       },
       '7': {
         fontSize: '$7',
-        letterSpacing: '-.031em',
-        textIndent: '-.005em',
+        letterSpacing: '.031em',
+        textIndent: '.005em',
       },
       '8': {
         fontSize: '$8',
-        letterSpacing: '-.034em',
-        textIndent: '-.018em',
+        letterSpacing: '.032em',
+        textIndent: '.018em',
       },
       '9': {
         fontSize: '$9',
-        letterSpacing: '-.055em',
-        textIndent: '-.025em',
+        letterSpacing: '.012em',
+        // textIndent: '.02em',
       },
     },
     variant: {

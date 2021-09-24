@@ -9,11 +9,11 @@ const colorVariants = Object.keys(Colors).reduce(
     [color]: {
       color: `$${color}11`,
       textDecoration: `underline`,
-      textDecorationColor: `$${color}6`,
+      textDecorationColor: `$${color}9`,
       transition: 'all .15s',
       '@hover': {
         '&:hover': {
-          textDecorationColor: `$${color}9`,
+          textDecorationColor: `$${color}11`,
         },
       },
       '&:focus': {
@@ -62,10 +62,10 @@ export const link = css({
       contrast: {
         color: '$hiContrast',
         textDecoration: 'underline',
-        textDecorationColor: '$slate4',
+        textDecorationColor: '$slate10',
         '@hover': {
           '&:hover': {
-            textDecorationColor: '$slate7',
+            textDecorationColor: '$slate12',
           },
         },
         '&:focus': {
