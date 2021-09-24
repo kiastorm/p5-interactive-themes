@@ -117,7 +117,7 @@ const Article = (props) => {
       css={{
         transform: 'translateY(20px)',
         opacity: 0,
-        backgroundColor: 'white',
+        backgroundColor: `$${activeColor}4`,
         p: '$2',
         minHeight: '$8',
         textAlign: 'left',
@@ -129,10 +129,10 @@ const Article = (props) => {
       }}
       {...rest}
     >
-      <Heading size="1" css={{ mb: '$1' }}>
+      <Heading variant={activeColor} size="1" css={{ mb: '$1' }}>
         {name}
       </Heading>
-      <Paragraph>
+      <Paragraph variant={activeColor}>
         With more useful text too. Here we will discuss an important topic: me,
         myself, I - number one.
       </Paragraph>
