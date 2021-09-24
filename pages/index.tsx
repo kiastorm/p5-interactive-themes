@@ -132,8 +132,8 @@ const Article = (props) => {
         {name}
       </Heading>
       <Paragraph variant={activeColor}>
-        With more useful text too. Here we will discuss an important topic: me,
-        myself, I - number one.
+        With more useful text too. Here we will discuss an important topic:
+        computers, computers, code &amp; computers.
       </Paragraph>
     </Box>
   )
